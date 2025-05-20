@@ -6,7 +6,7 @@
 /*   By: ydembele <ydembele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 13:32:06 by ydembele          #+#    #+#             */
-/*   Updated: 2025/05/14 15:19:49 by ydembele         ###   ########.fr       */
+/*   Updated: 2025/05/18 16:22:11 by ydembele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,16 @@ int	ft_len(char *s, char c);
 char	*ft_njoin(char *res, char *buffer, int n);
 void	ft_buffer_rest(char *tab, char	*buffer);
 void	ft_metzero(char *tab);
+void	*ft_memset(void *s, int c, size_t n);
+char	*get_next_line(int fd);
+char	*next_line(char *tab, int fd);
+int	ft_strchr(const char *s, int c);
+char	*ft_calloc(size_t nmemb, size_t size);
+char	*ft_strdup(char *s);
 
 #endif
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 10
+# define BUFFER_SIZE 42
 
 #endif
