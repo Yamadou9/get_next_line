@@ -5,25 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ydembele <ydembele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/14 13:27:03 by ydembele          #+#    #+#             */
-/*   Updated: 2025/05/20 13:15:04 by ydembele         ###   ########.fr       */
+/*   Created: 2025/05/21 18:58:49 by ydembele          #+#    #+#             */
+/*   Updated: 2025/05/21 19:08:00 by ydembele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-void	*ft_memset(void *s, int c, size_t n)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < n)
-	{
-		*(unsigned char *)(s + i) = c;
-		i++;
-	}
-	return (s);
-}
 
 int	ft_strchr(const char *s, int c)
 {
@@ -67,34 +54,31 @@ char	*ft_njoin(char *res, char *buffer, int n)
 	return (free(res), line);
 }
 
-char	*next_line(char *tab, int fd)
+char	*next_line(char *tab, int fd, char *buffer)
 {
 	char	*res;
-	char	*buffer;
+	int		t;
 
-	buffer = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	if (buffer == NULL)
-		return (NULL);
+	t = 0;
 	res = NULL;
 	if (*tab)
 	{
 		res = ft_njoin(res, tab, ft_len(tab, '\n'));
 		if (res == NULL)
 			return (free(buffer), NULL);
-		// if (ft_strchr(tab, '\n'))
 		ft_buffer_rest(tab, tab);
-		// else
-		// 	tab[0] = '\0';
 	}
-	while ((ft_strchr(res, '\n') == 0) && read(fd, buffer, BUFFER_SIZE) > 0)
+	while (ft_strchr(res, '\n') == 0)
 	{
+		t = read(fd, buffer, BUFFER_SIZE);
+		if (t <= 0)
+			break ;
+		buffer[t] = 0;
 		res = ft_njoin(res, buffer, ft_len(buffer, '\n'));
 		if (res == NULL)
 			return (free(buffer), NULL);
 		ft_buffer_rest(tab, buffer);
 	}
-	if (read(fd, 0, 0) == 0 && (res == NULL))
-		return (free(buffer), NULL);
 	return (free(buffer), res);
 }
 
@@ -102,33 +86,13 @@ char	*get_next_line(int fd)
 {
 	char		*next;
 	static char	tab[BUFFER_SIZE + 1];
+	char		*buffer;
 
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+		return (ft_metzero(tab), NULL);
+	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
+	if (!buffer)
 		return (NULL);
-	next = next_line(tab, fd);
+	next = next_line(tab, fd, buffer);
 	return (next);
-}
-
-int main(int ac, char **av)
-{
-	char	*res;
-	int		fd;
-	int		i;
-
-	(void)ac;
-	fd = open(av[1], O_RDONLY);
-	i = 0;
-	res = get_next_line(fd);
-	printf("%s", res);
-	while (res)
-	{
-		res = get_next_line(fd);
-		printf("%s", res);
-		free(res);
-	}
-	write(1, res, ft_len(res, 0));
-	free(res);
-
-
-
 }

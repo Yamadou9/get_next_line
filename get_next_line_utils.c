@@ -6,7 +6,7 @@
 /*   By: ydembele <ydembele@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/02 00:18:05 by ydembele          #+#    #+#             */
-/*   Updated: 2025/05/18 20:41:27 by ydembele         ###   ########.fr       */
+/*   Updated: 2025/05/21 19:06:29 by ydembele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 #include <stdint.h>
 #include "get_next_line.h"
 
-void	*ft_memset(void *s, int c, size_t n);
 int		ft_strchr(const char *s, int c);
 
 char	*ft_strdup(char *s)
@@ -49,21 +48,6 @@ char	*ft_strdup(char *s)
 	return (res);
 }
 
-char	*ft_calloc(size_t nmemb, size_t size)
-{
-	char	*s;
-	size_t	t;
-
-	if (size != 0 && nmemb > SIZE_MAX / size)
-		return (0);
-	t = nmemb * size;
-	s = malloc(size * nmemb);
-	if (s == NULL)
-		return (NULL);
-	ft_memset(s, 0, t);
-	return (s);
-}
-
 void	ft_metzero(char *s)
 {
 	int		i;
@@ -79,19 +63,14 @@ void	ft_buffer_rest(char *tab, char	*buffer)
 {
 	int		i;
 	int		j;
-	char	*temp;
 
-	temp = ft_strdup(buffer);
-	if (temp == NULL)
-		return ;
 	i = 0;
-	j = ft_len(temp, '\n');
-	if (ft_strchr(temp, '\n') == 0)
-		return (free(temp), ft_metzero(tab));
-	while (temp[j])
-		tab[i++] = temp[j++];
+	j = ft_len(buffer, '\n');
+	if (ft_strchr(buffer, '\n') == 0)
+		return (ft_metzero(tab));
+	while (buffer[j])
+		tab[i++] = buffer[j++];
 	tab[i] = 0;
-	free(temp);
 }
 
 int	ft_len(char *s, char c)
